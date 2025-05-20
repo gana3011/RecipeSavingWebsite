@@ -1,0 +1,6 @@
+spring.application.name=recipe
+spring.datasource.url=your_url
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+
+spring.jpa.hibernate.ddl-auto=update
