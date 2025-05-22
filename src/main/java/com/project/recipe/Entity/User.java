@@ -6,22 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "tags")
-public class Tag {
+@Table(name="users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tag_id")
+    @Column(name="user_id")
     private Long id;
-    @Column(unique = true)
     private String name;
-    @ManyToMany(mappedBy = "tags")
-    private Set<Recipe> recipes = new HashSet<>();
+    private String email;
+    private String password;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Recipe> recipes;
 }
