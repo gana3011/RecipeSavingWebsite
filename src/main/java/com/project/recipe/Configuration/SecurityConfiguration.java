@@ -14,8 +14,8 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // ✅ Allow this endpoint without login
-                        .anyRequest().authenticated()                // ❌ Block all other endpoints unless logged in
+                        .requestMatchers("/api/auth/**").permitAll() // Allow this endpoint without login
+                        .anyRequest().authenticated()                //  Block all other endpoints unless logged in
                 );
         return http.build();
     }

@@ -1,6 +1,7 @@
 package com.project.recipe.Mapper;
 
 import com.project.recipe.Dto.UserDto;
+import com.project.recipe.Dto.UserResponseDto;
 import com.project.recipe.Entity.Recipe;
 import com.project.recipe.Entity.User;
 
@@ -22,5 +23,13 @@ public class UserMapper {
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         return user;
+    }
+
+    public static UserResponseDto convertToUserResponse(User user){
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(user.getId());
+        userResponseDto.setName(user.getName());
+        userResponseDto.setEmail(user.getEmail());
+        return userResponseDto;
     }
 }
