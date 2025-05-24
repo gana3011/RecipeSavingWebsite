@@ -17,6 +17,7 @@ import java.util.Optional;
 public class UserService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private JwtUtil jwtUtil;
     public String createUser(UserDto userDto){
         User user = UserMapper.convertToUser(userDto);
         String hashedPassword = passwordEncoder.encode(user.getPassword());
@@ -33,6 +34,7 @@ public class UserService {
         if(!matches){
             throw new BadCredentialsException("Invalid email or password");
         }
-        return UserMapper.convertToUserResponse(user);
+        String jwt = jwtUtil.generateToken(userDto);
+        return UserMapper.convertToUserResponse(user,jwt);
     }
 }

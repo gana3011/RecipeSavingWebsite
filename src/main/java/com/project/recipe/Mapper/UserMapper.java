@@ -25,11 +25,12 @@ public class UserMapper {
         return user;
     }
 
-    public static UserResponseDto convertToUserResponse(User user){
+    public static UserResponseDto convertToUserResponse(User user,String jwtToken){
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(user.getId());
         userResponseDto.setName(user.getName());
         userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setJwtToken(jwtToken);
         return userResponseDto;
     }
 }
