@@ -22,6 +22,8 @@ public class User {
     private String name;
     private String email;
     private String password;
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean isVerified = false;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Recipe> recipes;
 }

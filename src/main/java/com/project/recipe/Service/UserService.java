@@ -1,6 +1,7 @@
 package com.project.recipe.Service;
 import com.project.recipe.Dto.UserDto;
 import com.project.recipe.Dto.UserResponseDto;
+import com.project.recipe.Entity.EmailVerification;
 import com.project.recipe.Entity.User;
 import com.project.recipe.Mapper.UserMapper;
 import com.project.recipe.Repository.UserRepository;
@@ -17,13 +18,21 @@ import java.util.Optional;
 public class UserService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private EmailVerificationService emailVerificationService;
     private JwtUtil jwtUtil;
     public String createUser(UserDto userDto){
         User user = UserMapper.convertToUser(userDto);
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         User savedUser = userRepository.save(user);
-        return "User Created";
+        boolean sent = emailVerificationService.sendOtp(user.getEmail());
+        if(sent){
+            return "Check your mail and enter the Otp to verify";
+        }
+        else{
+            return "Error sending Mail";
+        }
+
     }
 
     public UserResponseDto signinUser(UserDto userDto){
