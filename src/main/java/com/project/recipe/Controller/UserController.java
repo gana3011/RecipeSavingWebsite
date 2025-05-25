@@ -2,6 +2,7 @@ package com.project.recipe.Controller;
 
 import com.project.recipe.Dto.UserDto;
 import com.project.recipe.Dto.UserResponseDto;
+import com.project.recipe.Dto.OtpRequestDto;
 import com.project.recipe.Service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,12 @@ public class UserController {
     public ResponseEntity<String> signup(@RequestBody UserDto userDto){
         String savedUser = userService.createUser(userDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<String> verify(@RequestBody OtpRequestDto otpRequestDto){
+        String msg = userService.verifyOtp(otpRequestDto);
+        return new ResponseEntity<>(msg, HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")

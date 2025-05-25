@@ -1,7 +1,7 @@
 package com.project.recipe.Service;
 import com.project.recipe.Dto.UserDto;
 import com.project.recipe.Dto.UserResponseDto;
-import com.project.recipe.Entity.EmailVerification;
+import com.project.recipe.Dto.OtpRequestDto;
 import com.project.recipe.Entity.User;
 import com.project.recipe.Mapper.UserMapper;
 import com.project.recipe.Repository.UserRepository;
@@ -10,8 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +30,18 @@ public class UserService {
         else{
             return "Error sending Mail";
         }
+    }
 
+    public String verifyOtp(OtpRequestDto otpRequestDto){
+        boolean isVerified = emailVerificationService.verifyOtp(otpRequestDto.getEmail(), otpRequestDto.getOtp());
+        if(isVerified){
+            User user = userRepository.findByEmail(otpRequestDto.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            user.setVerified(true);
+            userRepository.save(user);
+            return "User Verified Successfully";
+        }
+        return "Enter correct OTP";
     }
 
     public UserResponseDto signinUser(UserDto userDto){

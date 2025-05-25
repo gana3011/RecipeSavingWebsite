@@ -41,4 +41,8 @@ public class EmailVerificationService {
             return false;
         }
     }
+
+    public boolean verifyOtp(String email, String otp){
+        return repo.findByEmail(email).filter(ev->ev.getOtp().equals(otp) && ev.getExpiryTime().isAfter(LocalDateTime.now())).isPresent();
+    }
 }
