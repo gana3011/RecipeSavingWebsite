@@ -1,9 +1,12 @@
 package com.project.recipe.Service;
 
 import com.project.recipe.Dto.UserDto;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -20,17 +23,47 @@ public class JwtUtil {
 
     private Key secretKey;
 
+    @PostConstruct
+    public void initKey() {
+        secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret));
+    }
+
+
     private Key getSecretKey() {
-        if (secretKey == null) {
-            secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret));
-        }
         return secretKey;
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(getSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    private String extractUserName(String token) {
+        return extractAllClaims(token).getSubject(); // subject = username
+    }
+
+    public Date extractExpiration(String token) {
+        return extractAllClaims(token).getExpiration(); // exp = expiration
+    }
+
+    private boolean isExpired(String token){
+        return extractExpiration(token).before(new Date());
     }
 
     public String generateToken(UserDto userDto){
         return createToken(userDto.getName());
     }
-    private String createToken(String name){
-        return Jwts.builder().subject(name).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis()+ expirationMillis)).signWith(getSecretKey()).compact();
+
+    private String createToken(String email){
+        return Jwts.builder().subject(email).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis()+ expirationMillis)).signWith(getSecretKey()).compact();
+    }
+
+    public boolean verifyToken(String jwt, UserDetails userDetails){
+        String email = extractUserName(jwt);
+        return (email.equals(userDetails.getUsername()) && !isExpired(jwt));
+
     }
 }
