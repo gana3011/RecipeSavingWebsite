@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class JwtUtil {
@@ -41,7 +39,7 @@ public class JwtUtil {
                 .getBody();
     }
 
-    private String extractUserName(String token) {
+    public String extractEmail(String token) {
         return extractAllClaims(token).getSubject(); // subject = username
     }
 
@@ -54,7 +52,7 @@ public class JwtUtil {
     }
 
     public String generateToken(UserDto userDto){
-        return createToken(userDto.getName());
+        return createToken(userDto.getEmail());
     }
 
     private String createToken(String email){
@@ -62,7 +60,7 @@ public class JwtUtil {
     }
 
     public boolean verifyToken(String jwt, UserDetails userDetails){
-        String email = extractUserName(jwt);
+        String email = extractEmail(jwt);
         return (email.equals(userDetails.getUsername()) && !isExpired(jwt));
 
     }
