@@ -10,9 +10,11 @@ import com.project.recipe.Repository.TagRepository;
 import com.project.recipe.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,5 +36,18 @@ public class RecipeService {
         Recipe recipe = RecipeMapper.convertToEntity(recipeDto,tags,user);
         Recipe savedRecipe = recipeRepository.save(recipe);
         return RecipeMapper.convertToDto(savedRecipe);
+    }
+
+    public List<RecipeDto> getRecipe(Long userId){
+//        User user = userRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("User not found"));
+        List<Recipe> recipes = recipeRepository.findByUserId(userId);
+        if(recipes.isEmpty()){
+            throw new RuntimeException("No recipes associated with user");
+        }
+        List<RecipeDto> recipeDtos = recipes.stream()
+                .map(RecipeMapper::convertToDto)
+                .collect(Collectors.toList());
+
+        return recipeDtos;
     }
 }

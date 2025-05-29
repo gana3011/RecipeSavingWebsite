@@ -42,9 +42,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
 
-        System.out.println("Authorization Header: " + authorizationHeader);
-        System.out.println("JWT: " + jwt);
-        System.out.println("Email: " + email);
         filterChain.doFilter(request,response);
 
     }

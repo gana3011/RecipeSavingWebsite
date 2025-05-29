@@ -1,5 +1,6 @@
 package com.project.recipe.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,10 +21,12 @@ public class User {
     @Column(name="user_id")
     private Long id;
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
     private boolean isVerified = false;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Recipe> recipes;
 }

@@ -1,5 +1,6 @@
 package com.project.recipe.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Recipe {
     private Long id;
     @ManyToOne
     @JoinColumn(name="user_id",nullable = false)
+    @JsonBackReference
     private User user;
     private String name;
     private String description;
