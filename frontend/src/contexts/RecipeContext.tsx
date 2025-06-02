@@ -1,15 +1,16 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import axios from 'axios';
 
 export interface Recipe {
-  id: string;
+  id: number;
+  userId: number;
   name: string;
   description: string;
   url: string;
   tags: string[];
-  createdAt: string;
-  userId: string;
+
 }
 
 interface RecipeContextType {
@@ -18,8 +19,8 @@ interface RecipeContextType {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   filteredRecipes: Recipe[];
-  addRecipe: (recipe: Omit<Recipe, 'id' | 'createdAt' | 'userId'>) => Promise<void>;
-  deleteRecipe: (id: string) => Promise<void>;
+  addRecipe: (recipe: Omit<Recipe, 'id' | 'userId'>) => Promise<void>;
+  deleteRecipe: (id: number) => Promise<void>;
   refreshRecipes: () => Promise<void>;
 }
 
@@ -46,16 +47,13 @@ export function RecipeProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/recipes', {
-        headers: {
+       const {data} = await axios.get(`http://localhost:8080/api/users/${user.id}/recipes`,{
+         headers: {
           'Authorization': `Bearer ${token}`,
         },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setRecipes(data.recipes || []);
-      }
+      })
+      setRecipes(data|| []);
+      
     } catch (error) {
       console.error('Failed to fetch recipes:', error);
     } finally {
@@ -63,25 +61,17 @@ export function RecipeProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const addRecipe = async (recipeData: Omit<Recipe, 'id' | 'createdAt' | 'userId'>) => {
+  const addRecipe = async (recipeData: Omit<Recipe, 'id' | 'userId'>) => {
     if (!user) throw new Error('User not authenticated');
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/recipes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const {data} = await axios.post(`http://localhost:8080/api/users/${user.id}/recipes`,recipeData,{
+         headers: {
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(recipeData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add recipe');
-      }
-
-      const newRecipe = await response.json();
+      })
+      const newRecipe = data;
       setRecipes(prev => [newRecipe, ...prev]);
     } catch (error) {
       console.error('Failed to add recipe:', error);
@@ -89,20 +79,14 @@ export function RecipeProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const deleteRecipe = async (id: string) => {
+  const deleteRecipe = async (id: number) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/recipes/${id}`, {
-        method: 'DELETE',
-        headers: {
+      const response = await axios.delete(`http://localhost:8080/api/users/${user.id}/recipes/${id}`,{
+         headers: {
           'Authorization': `Bearer ${token}`,
         },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete recipe');
-      }
-
+      })
       setRecipes(prev => prev.filter(recipe => recipe.id !== id));
     } catch (error) {
       console.error('Failed to delete recipe:', error);

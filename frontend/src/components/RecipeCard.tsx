@@ -75,11 +75,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
           </div>
         )}
         
-        <div className="flex justify-between items-center pt-2">
-          <span className="text-xs text-gray-500">
-            Added {new Date(recipe.createdAt).toLocaleDateString()}
-          </span>
-          
+        <div className="flex justify-between items-center pt-2"> 
           {recipe.url && (
             <Button
               variant="outline"
