@@ -1,6 +1,7 @@
 package com.project.recipe.Service;
 
 import com.project.recipe.Dto.RecipeDto;
+import com.project.recipe.Dto.ResponseDto;
 import com.project.recipe.Entity.Recipe;
 import com.project.recipe.Entity.Tag;
 import com.project.recipe.Entity.User;
@@ -10,6 +11,7 @@ import com.project.recipe.Repository.TagRepository;
 import com.project.recipe.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,10 @@ public class RecipeService {
     private RecipeRepository recipeRepository;
     private TagRepository tagRepository;
     private UserRepository userRepository;
+    private ResponseDto responseDto(HttpStatus status, String message) {
+        return new ResponseDto(status, message);
+    }
+
     @Transactional
     public RecipeDto createRecipeWithTags(RecipeDto recipeDto, Long userId){
         User user = userRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("User not found"));
@@ -49,5 +55,10 @@ public class RecipeService {
                 .collect(Collectors.toList());
 
         return recipeDtos;
+    }
+
+    public ResponseDto deleteRecipe(Long id){
+        recipeRepository.deleteById(id);
+        return responseDto(HttpStatus.NO_CONTENT, "Recipe deleted Successfully");
     }
 }

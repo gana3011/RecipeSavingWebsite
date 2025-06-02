@@ -4,6 +4,7 @@ import com.project.recipe.Dto.ResponseDto;
 import com.project.recipe.Dto.UserDto;
 import com.project.recipe.Dto.UserResponseDto;
 import com.project.recipe.Dto.OtpRequestDto;
+import com.project.recipe.Service.EmailVerificationService;
 import com.project.recipe.Service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,13 @@ public class UserController {
     @PostMapping("/verify")
     public ResponseEntity<ResponseDto> verify(@RequestBody OtpRequestDto otpRequestDto){
         ResponseDto response = userService.verifyOtp(otpRequestDto);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @PostMapping("/resend")
+    public ResponseEntity<ResponseDto> resend(@RequestBody Map<String, String> request){
+        String email = request.get("email").trim();
+        ResponseDto response = userService.resendOtp(email);
         return new ResponseEntity<>(response, response.getStatus());
     }
 

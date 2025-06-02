@@ -1,6 +1,7 @@
 package com.project.recipe.Controller;
 
 import com.project.recipe.Dto.RecipeDto;
+import com.project.recipe.Dto.ResponseDto;
 import com.project.recipe.Entity.Recipe;
 import com.project.recipe.Service.RecipeService;
 import lombok.AllArgsConstructor;
@@ -27,4 +28,11 @@ public class RecipeController {
         List<RecipeDto> recipes = recipeService.getRecipe(userId);
         return new ResponseEntity<>(recipes, HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{recipeid}")
+    public ResponseEntity<ResponseDto> deleteRecipe(@PathVariable("recipeid") Long recipeId){
+        ResponseDto response = recipeService.deleteRecipe(recipeId);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
 }
