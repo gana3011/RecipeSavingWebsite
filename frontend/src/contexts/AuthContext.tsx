@@ -23,9 +23,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing auth token
+    console.log('AuthContext: Checking for existing authentication...');
     const token = localStorage.getItem('authToken');
-    const userData = localStorage.getItem('userData');
+    const userData = localStorage.getItem('user');
     
     if (token && userData) {
       setUser(JSON.parse(userData));
@@ -36,19 +36,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const {data} = await axios.post('http://localhost:8080/api/auth/signin', {
+        email,password
       });
 
-      if (!response.ok) {
-        throw new Error('Invalid credentials');
-      }
-
-      const data = await response.json();
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('userData', JSON.stringify(data.user));
+      localStorage.setItem("authToken", data.user.jwtToken);
+      localStorage.setItem("user", JSON.stringify({
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email
+      }));
       setUser(data.user);
     } catch (error) {
       console.error('Sign in error:', error);
@@ -62,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const {data} = await axios.post("http://localhost:8080/api/auth/signup",{name,email,password});
+      return data.message;
     } catch (error) {
       console.error('Sign up error:', error);
       throw error;

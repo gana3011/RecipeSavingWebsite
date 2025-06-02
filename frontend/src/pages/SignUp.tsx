@@ -33,12 +33,12 @@ const SignUp = () => {
     setIsLoading(true);
 
     try {
-      await signUp(name, email, password);
+      const msg = await signUp(name, email, password);
       toast({
         title: "Account created!",
-        description: "Welcome to Recipe Keeper. Start saving your favorite recipes!",
+        description: `${msg}`,
       });
-      navigate('/dashboard');
+      navigate('/verify-otp', { state: { email } });
     } catch (error) {
       toast({
         title: "Sign up failed",

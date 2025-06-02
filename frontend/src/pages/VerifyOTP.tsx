@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { useToast } from '@/hooks/use-toast';
+import axios from 'axios';
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState('');
@@ -13,8 +14,11 @@ const VerifyOTP = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Get email from signup page state
   const email = location.state?.email || '';
+
+  useEffect(()=>{
+    console.log(otp);
+  },[]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,17 +35,8 @@ const VerifyOTP = () => {
     setIsLoading(true);
 
     try {
-      // Here you would verify the OTP with your backend
-      const response = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Invalid OTP');
-      }
-
+      await axios.post("http://localhost:8080/api/auth/verify",
+        {email:email,otp:otp.trim()});
       toast({
         title: "Email verified!",
         description: "Your account has been successfully verified.",
@@ -60,12 +55,7 @@ const VerifyOTP = () => {
 
   const handleResendOTP = async () => {
     try {
-      await fetch('/api/auth/resend-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
+      await axios.post("http://localhost:8080/api/auth/resend", {email: email.trim()});
       toast({
         title: "OTP sent!",
         description: "A new verification code has been sent to your email.",
@@ -107,14 +97,16 @@ const VerifyOTP = () => {
                     value={otp}
                     onChange={setOtp}
                     maxLength={6}
-                    render={({ slots }) => (
-                      <InputOTPGroup>
-                        {slots?.map((slot, index) => (
-                          <InputOTPSlot key={index} {...slot} index={index} />
-                        ))}
-                      </InputOTPGroup>
-                    )}
-                  />
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
                 </div>
               </div>
 

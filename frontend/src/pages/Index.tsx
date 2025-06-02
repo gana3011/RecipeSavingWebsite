@@ -27,6 +27,10 @@ const Index = () => {
     );
   }
 
+  if (user) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-recipe-cream via-white to-recipe-cream-dark">
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
