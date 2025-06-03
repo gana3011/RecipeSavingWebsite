@@ -55,7 +55,7 @@ const SignUp = () => {
       <div className="w-full max-w-md animate-fade-in">
         <Card className="shadow-xl border-0">
           <CardHeader className="text-center bg-gradient-to-r from-recipe-orange to-recipe-orange-light text-white rounded-t-lg">
-            <CardTitle className="text-2xl font-bold">Join Recipe Keeper</CardTitle>
+            <CardTitle className="text-2xl font-bold">Join Flavour File</CardTitle>
             <CardDescription className="text-orange-100">
               Create your account and start collecting recipes
             </CardDescription>

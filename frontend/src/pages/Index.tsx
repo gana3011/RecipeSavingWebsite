@@ -37,11 +37,11 @@ const Index = () => {
         <div className="text-center max-w-4xl mx-auto animate-fade-in">
           {/* Logo and Brand */}
           <div className="mb-8">
-            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-recipe-orange to-recipe-orange-light rounded-2xl flex items-center justify-center shadow-lg">
+            {/* <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-recipe-orange to-recipe-orange-light rounded-2xl flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-2xl">RK</span>
-            </div>
+            </div> */}
             <h1 className="text-5xl font-bold text-gray-900 mb-4">
-              Recipe Keeper
+              Flavour File
             </h1>
             <p className="text-xl text-gray-600 mb-8">
               Your personal culinary collection, organized and accessible anywhere
@@ -93,10 +93,6 @@ const Index = () => {
               Sign In
             </Button>
           </div>
-
-          <p className="text-gray-500 text-sm mt-6">
-            Free to use • No credit card required
-          </p>
         </div>
       </div>
     </div>
