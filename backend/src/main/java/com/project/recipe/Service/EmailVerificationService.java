@@ -32,7 +32,8 @@ public class EmailVerificationService {
             SimpleMailMessage message= new SimpleMailMessage();
             message.setTo(email);
             message.setSubject("Your verification Otp");
-            message.setText("Your Otp:"+otp);
+            message.setText("Your OTP:"+otp);
+            message.setText("Make sure to enter the OTP within 5 minutes");
             javaMailSender.send(message);
             return true;
         }
