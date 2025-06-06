@@ -7,6 +7,8 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 const VerifyOTP = () => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +37,7 @@ const VerifyOTP = () => {
     setIsLoading(true);
 
     try {
-      await axios.post("http://localhost:8080/api/auth/verify",
+      await axios.post(`${baseUrl}/api/auth/verify`,
         {email:email,otp:otp.trim()});
       toast({
         title: "Email verified!",
@@ -55,7 +57,7 @@ const VerifyOTP = () => {
 
   const handleResendOTP = async () => {
     try {
-      await axios.post("http://localhost:8080/api/auth/resend", {email: email.trim()});
+      await axios.post(`${baseUrl}/api/auth/resend`, {email: email.trim()});
       toast({
         title: "OTP sent!",
         description: "A new verification code has been sent to your email.",

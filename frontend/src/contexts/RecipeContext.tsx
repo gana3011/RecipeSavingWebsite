@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import axios from 'axios';
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 export interface Recipe {
   id: number;
   userId: number;
@@ -47,7 +49,7 @@ export function RecipeProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('authToken');
-       const {data} = await axios.get(`http://localhost:8080/api/users/${user.id}/recipes`,{
+       const {data} = await axios.get(`${baseUrl}/api/users/${user.id}/recipes`,{
          headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -66,7 +68,7 @@ export function RecipeProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const token = localStorage.getItem('authToken');
-      const {data} = await axios.post(`http://localhost:8080/api/users/${user.id}/recipes`,recipeData,{
+      const {data} = await axios.post(`${baseUrl}/api/users/${user.id}/recipes`,recipeData,{
          headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -82,7 +84,7 @@ export function RecipeProvider({ children }: { children: React.ReactNode }) {
   const deleteRecipe = async (id: number) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.delete(`http://localhost:8080/api/users/${user.id}/recipes/${id}`,{
+      const response = await axios.delete(`${baseUrl}/api/users/${user.id}/recipes/${id}`,{
          headers: {
           'Authorization': `Bearer ${token}`,
         },

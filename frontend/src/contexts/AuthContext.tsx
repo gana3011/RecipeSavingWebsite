@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 interface User {
   id: string;
   email: string;
@@ -36,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const {data} = await axios.post('http://localhost:8080/api/auth/signin', {
+      const {data} = await axios.post(`${baseUrl}/api/auth/signin`, {
         email,password
       });
 
@@ -58,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async (name: string, email: string, password: string) => {
     setIsLoading(true);
     try {
-      const {data} = await axios.post("http://localhost:8080/api/auth/signup",{name,email,password});
+      const {data} = await axios.post(`${baseUrl}/api/auth/signup`,{name,email,password});
       return data.message;
     } catch (error) {
       console.error('Sign up error:', error);
