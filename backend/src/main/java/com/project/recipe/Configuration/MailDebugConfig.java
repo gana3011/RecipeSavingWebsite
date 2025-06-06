@@ -7,11 +7,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MailDebugConfig {
 
-    @Value("${spring.mail.username:NOT_SET}")
-    private String mailUser;
+    @Component
+    public class MailConfigDebug {
 
-    @PostConstruct
-    public void logMailUser() {
-        System.out.println(">>> Mail user loaded: " + mailUser);
+        @Value("${spring.mail.username:NOT_SET}")
+        private String mailUsername;
+
+        @Value("${spring.mail.password:NOT_SET}")
+        private String mailPassword;
+
+        @PostConstruct
+        public void MailConfigDebug() {
+            System.out.println("=== MAIL CONFIG DEBUG ===");
+            System.out.println("Mail Username: " + (mailUsername.equals("NOT_SET") ? "NOT_SET" : "SET"));
+            System.out.println("Mail Password: " + (mailPassword.equals("NOT_SET") ? "NOT_SET" : "SET"));
+            System.out.println("========================");
+        }
     }
 }
