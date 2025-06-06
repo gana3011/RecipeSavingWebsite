@@ -1,5 +1,6 @@
 package com.project.recipe.Configuration;
 
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,16 +13,16 @@ import java.util.Properties;
 @Configuration
 public class MailConfiguration {
 
-    @Value("${spring.mail.host}")
+    @Value("${spring.mail.host:smtp.gmail.com}")
     private String mailHost;
 
-    @Value("${spring.mail.port}")
+    @Value("${spring.mail.port:587}")
     private int mailPort;
 
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.username:NOT_SET}")
     private String mailUsername;
 
-    @Value("${spring.mail.password}")
+    @Value("${spring.mail.password:NOT_SET}")
     private String mailPassword;
 
     @PostConstruct
@@ -29,13 +30,26 @@ public class MailConfiguration {
         System.out.println("=== MAIL CONFIGURATION DEBUG ===");
         System.out.println("Mail Host: " + mailHost);
         System.out.println("Mail Port: " + mailPort);
-        System.out.println("Mail Username: " + (mailUsername != null && !mailUsername.isEmpty() ? "SET" : "NOT SET"));
-        System.out.println("Mail Password: " + (mailPassword != null && !mailPassword.isEmpty() ? "SET" : "NOT SET"));
+        System.out.println("Mail Username: " + mailUsername);
+        System.out.println("Mail Password: " + (mailPassword.equals("NOT_SET") ? "NOT_SET" : "SET"));
+
+        // Print all environment variables
+        System.out.println("=== ALL ENVIRONMENT VARIABLES ===");
+        System.getenv().forEach((key, value) -> {
+            if (key.contains("MAIL") || key.contains("SPRING")) {
+                System.out.println(key + " = " + (key.contains("PASSWORD") ? "***" : value));
+            }
+        });
         System.out.println("================================");
     }
 
     @Bean
     public JavaMailSender javaMailSender() {
+        if (mailUsername.equals("NOT_SET") || mailPassword.equals("NOT_SET")) {
+            System.out.println("WARNING: Mail credentials not properly set, creating mock JavaMailSender");
+            return new JavaMailSenderImpl(); // This will create a basic sender that won't work but won't crash
+        }
+
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
         mailSender.setHost(mailHost);
