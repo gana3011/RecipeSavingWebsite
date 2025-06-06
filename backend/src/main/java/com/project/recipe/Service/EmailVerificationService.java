@@ -29,11 +29,10 @@ public class EmailVerificationService {
 
     private boolean sendMail(String email,String otp){
         try {
-            SimpleMailMessage message= new SimpleMailMessage();
+            SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(email);
-            message.setSubject("Your verification Otp");
-            message.setText("Your OTP:"+otp);
-            message.setText("Make sure to enter the OTP within 5 minutes");
+            message.setSubject("Your verification OTP");
+            message.setText("Your OTP: " + otp + "\nMake sure to enter the OTP within 5 minutes.");
             javaMailSender.send(message);
             return true;
         }
