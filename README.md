@@ -1,21 +1,21 @@
-# 🍲 FlavourFile
+# FlavourFile
 
 **FlavourFile** is a full-stack web application that allows users to store, manage, and search for their favorite recipes. Users can sign up, log in, verify their email via OTP, and organize recipes with titles, descriptions, links, and tags.
 
 ---
 
-## 🚀 Features
+## Features
 
-* 🔐 User Authentication with JWT and Email OTP verification
-* 📬 Email service integration via Gmail SMTP
-* 📚 Recipe management: add, view, and filter recipes by name or tags
-* 🔎 Search functionality for better accessibility
-* 🌐 Full REST API backend with Spring Boot and PostgreSQL
-* 💅 Intuitive and responsive frontend built with React
+* User Authentication with JWT and Email OTP verification
+* Email service integration via Gmail SMTP
+* Recipe management: add, view, and filter recipes by name or tags
+* Search functionality for better accessibility
+* Full REST API backend with Spring Boot and PostgreSQL
+* Intuitive and responsive frontend built with React
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 
@@ -95,9 +95,3 @@ SPRING_MAIL_PASSWORD=your_app_password
 
 ---
 
-
-MIT License – see the [LICENSE](LICENSE) file for details.
-
----
-
-Let me know if you want to customize the README based on your actual deployment links, team members, or specific screenshots.
